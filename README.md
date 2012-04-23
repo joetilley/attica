@@ -1,4 +1,4 @@
-attica
+Attica
 ======
 
-An exercise for learning Haskell
+An exercise for learning Haskell 

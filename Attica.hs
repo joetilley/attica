@@ -32,13 +32,25 @@ numStrList :: Int -> [String]
 numStrList 0 = []
 numStrList n = (show n) : numStrList (n-1)
          
-runChoice :: [String] -> String -> IO Int
-runChoice choices prompt = do
-   printStrings $ zipWith (\x y -> (show x) ++ ") " ++ y) [1 .. 1000] choices
+makeChoice :: Show a => [a] -> String -> IO a
+makeChoice choices prompt = do
+   printStrings $ zipWith (\x y -> (show x) ++ ") " ++ (show y)) [1 .. 1000] choices
    strN <- getInput prompt (numStrList (length choices))
    let n = read strN :: Int
-   return n
+   return (choices !! (n-1))
   
+data Choice = Choice String (IO ())
+
+instance Show Choice where
+   show (Choice prompt _) = prompt
+
+runChoice :: Choice -> IO ()
+runChoice (Choice _ action) = action
+
+sewers = Choice "The Sewers" $ putStrLn "You encounter a rat.\nYou easily defeat it.\n\nYou Win!"
+graveyard = Choice "The Graveyard" $ putStrLn "You encounter a skeleton.\nYou are cleaved in twain.\n\nYou Lose!"
+dragonsLair = Choice "The Dragon's Lair" $ putStrLn "You die immediately.\n\nYou Lose!"
+
 main = do
    printHeader
    name <- singleLineInput "What is your name? "
@@ -46,7 +58,5 @@ main = do
    putStrLn $ "Welcome to Attica, " ++ name
    putStrLn "You are a skilled swordsman, seeking adventure"
    putStrLn "Select a location to explore"
-   location <- runChoice ["The Sewers", "The Graveyard"] "Where to?" 
-   if location == 1
-      then putStrLn "You encounter a rat.\nYou easily defeat it.\n\nYou Win!"
-      else putStrLn "You encounter a skeleton.\nYou are cleaved in twain.\n\nYou Lose!"
+   location <- makeChoice [sewers, graveyard, dragonsLair] "Where to?" 
+   runChoice location
