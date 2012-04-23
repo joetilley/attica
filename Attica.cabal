@@ -1,0 +1,12 @@
+Name:                Attica
+Version:             0.0
+Description:         A "fun" game
+License:             GPL
+License-file:        LICENSE
+Author:              Joe Tilley
+Maintainer:          jtilley@gmail.com
+Build-Type:          Simple
+Cabal-Version:       >=1.2
+Executable attica
+  Main-is:           Attica.hs
+  Build-Depends:     base >= 3 && < 5
