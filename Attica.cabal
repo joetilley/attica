@@ -8,5 +8,5 @@ Maintainer:          jtilley@gmail.com
 Build-Type:          Simple
 Cabal-Version:       >=1.2
 Executable attica
-  Main-is:           Attica.hs
+  Main-is:           Main.hs
   Build-Depends:     base >= 3 && < 5
