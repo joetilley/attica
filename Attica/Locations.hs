@@ -7,11 +7,13 @@ where
 import System.Random
 import Attica.IO
 import Attica.Monster
+import Attica.Player
+import Attica.Combat
 
 data Location = Location String [Monster]
 
-sewers = Location "The Sewers" [ (monster "Rat" "You make rat stew."), (monster "CHUD" "You are eaten.")]
-graveyard = Location "The Graveyard" [ (monster "Skeleton" "You grind its bones to make your bread."), (monster "Vampire" "You are exsanguinated.")]
+sewers = Location "The Sewers" [ (monster "Rat" "You catch rabies."), (monster "CHUD" "You are eaten.")]
+graveyard = Location "The Graveyard" [ (monster "Skeleton" "You are boned."), (monster "Vampire" "You are exsanguinated.")]
 dragonsLair = Location "The Dragon's Lair" [(monster "Dragon" "You are killed instantly.")]
 
 all_locs = [sewers, graveyard, dragonsLair]
@@ -22,7 +24,10 @@ locToChoice (Location name mons) = choice name $ do
 											r <- getStdRandom (randomR(0, (length mons)-1))
 											let m = mons !! r
 											gamePrintLn $ "You encounter a " ++ (monsterName m)
-											gamePrintLn $ monsterCombatResult m
+											playerHits <- hits (player 100) m
+											if playerHits 
+												then gamePrintLn $ "You slay the " ++ (monsterName m)
+												else gamePrintLn $ monsterCombatResult m
 
 -- | Takes a list of locations, goes to one and executes it
 gotoLocation :: [Location] -> IO ()

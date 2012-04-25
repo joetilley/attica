@@ -1,62 +1,48 @@
 import System.IO
+import Control.Monad.IO.Class (MonadIO, liftIO)
+import Control.Monad.State (StateT)
+import Attica.IO
+import Attica.Locations
+import Attica.Dice
 
-printHeader :: IO ()
+-- You are trying to use pattern matching with a boolean type to trigger actions
+-- Why not make the actions BE the state
+-- Game has State plus NextAction
+
+printHeader :: MonadIO m => m ()
 printHeader = do
-   putStrLn "Attica"
-   putStrLn "A Game of \"Fun\""
-   putStrLn "Copyright 2012 - Joseph Tilley"
-   putStrLn ""
+   gamePrintLn "Attica"
+   gamePrintLn "A Game of \"Fun\""
+   gamePrintLn "Copyright 2012 - Joseph Tilley"
+   gamePrintLn ""
 
-singleLineInput :: String -> IO String
-singleLineInput str = do
-   putStr str
-   hFlush stdout
-   getLine
+combatLoop :: IO ()
+combatLoop = do
+   inp <- singleLineInput "Type q to quit> "
+   if inp == "q" 
+      then return()
+      else combatLoop
 
-getInput :: String -> [String] -> IO String
-getInput prompt valids = do
-   inp <- singleLineInput "Where to? "
-   if elem inp valids 
-      then return inp
-      else do
-         putStrLn "Invalid Input"
-         getInput prompt valids
-
-printStrings :: [String] -> IO ()
-printStrings [] = return ()
-printStrings (x:xs) = do
-   putStrLn x
-   printStrings xs
-         
-numStrList :: Int -> [String]
-numStrList 0 = []
-numStrList n = (show n) : numStrList (n-1)
-         
-makeChoice :: Show a => [a] -> String -> IO a
-makeChoice choices prompt = do
-   printStrings $ zipWith (\x y -> (show x) ++ ") " ++ (show y)) [1 .. 1000] choices
-   strN <- getInput prompt (numStrList (length choices))
-   let n = read strN :: Int
-   return (choices !! (n-1))
-  
-data Choice = Choice String (IO ())
-
-instance Show Choice where
-   show (Choice prompt _) = prompt
-
-runChoice :: Choice -> IO ()
-runChoice (Choice _ action) = action
-
-sewers = Choice "The Sewers" $ putStrLn "You encounter a rat.\nYou easily defeat it.\n\nYou Win!"
-graveyard = Choice "The Graveyard" $ putStrLn "You encounter a skeleton.\nYou are cleaved in twain.\n\nYou Lose!"
-dragonsLair = Choice "The Dragon's Lair" $ putStrLn "You die immediately.\n\nYou Lose!"
-
-main = do
+intro :: IO ()
+intro = do
    printHeader
-   name <- singleLineInput "What is your name? "
-   putStrLn ""
-   putStrLn $ "Welcome to Attica, " ++ name
-   putStrLn "You are a skilled swordsman, seeking adventure"
-   putStrLn "Select a location to explore"
-   location <- makeChoice [sewers, graveyard, dragonsLair] "Where to?" 
-   runChoice location
+   gamePrintLn "Welcome to Attica."
+   gamePrintLn "You are a skilled swordsman, seeking adventure."
+
+rollTestLoop :: IO ()
+rollTestLoop = do
+   inp <- singleLineInput "(enter q to quit) What dice shall I roll today? "
+   if inp == "q" 
+      then return()
+      else do
+         let dice = d inp
+         v <- rollDice dice
+         putStrLn $ "The bones show " ++ (show v)
+         rollTestLoop
+
+main :: IO ()
+main = do
+   rollTestLoop
+   intro
+   goAnywhere
+   

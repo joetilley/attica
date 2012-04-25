@@ -5,7 +5,8 @@ module Attica.IO
    getInput,
    choice,
    makeChoice,
-   runChoice
+   runChoice,
+   Choice
    )
 where
 
