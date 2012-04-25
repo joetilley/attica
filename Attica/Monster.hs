@@ -8,6 +8,7 @@ module Attica.Monster
 where
 
 import Attica.Combat
+import Attica.Dice
 
 data Monster = Monster { 
 	monsterName :: String,
@@ -18,7 +19,7 @@ data Monster = Monster {
 instance Combatant Monster where
 	damage m amt = m { monsterHP = (monsterHP m) - amt }
 
-monster :: String -> String -> Monster
-monster n c = Monster { monsterName=n, monsterCombatResult=c, monsterHP=50 }
-
-	
+monster :: String -> String-> String -> IO Monster
+monster n hp c = do
+	mhp <- rollDice $ d hp
+	return Monster { monsterName=n, monsterCombatResult=c, monsterHP=mhp}

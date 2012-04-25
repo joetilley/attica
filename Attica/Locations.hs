@@ -10,11 +10,11 @@ import Attica.Monster
 import Attica.Player
 import Attica.Combat
 
-data Location = Location String [Monster]
+data Location = Location String [IO Monster]
 
-sewers = Location "The Sewers" [ (monster "Rat" "You catch rabies."), (monster "CHUD" "You are eaten.")]
-graveyard = Location "The Graveyard" [ (monster "Skeleton" "You are boned."), (monster "Vampire" "You are exsanguinated.")]
-dragonsLair = Location "The Dragon's Lair" [(monster "Dragon" "You are killed instantly.")]
+sewers = Location "The Sewers" [ (monster "Rat" "2d4" "You catch rabies."), (monster "CHUD" "4d4" "You are eaten.")]
+graveyard = Location "The Graveyard" [ (monster "Skeleton" "2d6"  "You are boned."), (monster "Vampire" "3d8" "You are exsanguinated.")]
+dragonsLair = Location "The Dragon's Lair" [(monster "Dragon" "3d12" "You are killed instantly.")]
 
 all_locs = [sewers, graveyard, dragonsLair]
 
@@ -22,7 +22,7 @@ all_locs = [sewers, graveyard, dragonsLair]
 locToChoice :: Location -> Choice
 locToChoice (Location name mons) = choice name $ do
 											r <- getStdRandom (randomR(0, (length mons)-1))
-											let m = mons !! r
+											m <- mons !! r
 											gamePrintLn $ "You encounter a " ++ (monsterName m)
 											playerHits <- hits (player 100) m
 											if playerHits 
