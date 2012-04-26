@@ -5,7 +5,7 @@ module Attica.Player
 )
 where
 
-import Attica.Combat
+import Attica.Core
 
 data Player = Player Int
 

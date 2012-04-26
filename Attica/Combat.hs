@@ -1,22 +1,22 @@
 module Attica.Combat
 (
-	Combatant,
-	toHit,
-	damage,
-	attackBonus,
-	attackDamage,
 	hits
 )
 where
 
 import System.Random
 import Control.Monad.IO.Class (MonadIO, liftIO)
+import Attica.Game
+import Attica.IO
+import Attica.Core
 
-class Combatant c where
-	attackBonus :: c -> Int
-	toHit :: c -> Int
-	attackDamage :: c -> Int
-	damage :: c -> Int -> c
+combatLoop :: Game ()
+combatLoop = do
+   inp <- singleLineInput "Type q to quit> "
+   if inp == "q" 
+      then return()
+      else combatLoop
+
 
 hits :: MonadIO m => Combatant a => Combatant b => a -> b -> m Bool
 hits a b = do

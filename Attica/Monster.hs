@@ -7,9 +7,9 @@ module Attica.Monster
 )
 where
 
-import Attica.Combat
 import Attica.Dice
 import Control.Monad.IO.Class (MonadIO, liftIO)
+import Attica.Core
 
 data Monster = Monster { 
 	monsterName :: String,

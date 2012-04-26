@@ -18,33 +18,15 @@ printHeader = do
    gamePrintLn "Copyright 2012 - Joseph Tilley"
    gamePrintLn ""
 
-combatLoop :: IO ()
-combatLoop = do
-   inp <- singleLineInput "Type q to quit> "
-   if inp == "q" 
-      then return()
-      else combatLoop
-
 intro :: IO ()
 intro = do
    printHeader
    gamePrintLn "Welcome to Attica."
    gamePrintLn "You are a skilled swordsman, seeking adventure."
 
-rollTestLoop :: IO ()
-rollTestLoop = do
-   inp <- singleLineInput "(enter q to quit) What dice shall I roll today? "
-   if inp == "q" 
-      then return()
-      else do
-         let dice = d inp
-         v <- rollDice dice
-         putStrLn $ "The bones show " ++ (show v)
-         rollTestLoop
-
 main :: IO ()
 main = do
+   let thePlayer = player 50
    intro
-   runGame goAnywhere $ player 50
+   runGame goAnywhere $ thePlayer
    return ()
-   
