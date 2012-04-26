@@ -25,10 +25,8 @@ randomEncounter mons = do
 	r <- liftIO $ getStdRandom (randomR(0, (length mons)-1))
 	m <- mons !! r
 	gamePrintLn $ "You encounter a " ++ (monsterName m)
-	playerHits <- hits (player 100) m
-	if playerHits 
-		then gamePrintLn $ "You slay the " ++ (monsterName m)
-		else gamePrintLn $ monsterCombatResult m
+	setMonster m
+	combatLoop
 
 -- | Changes locations into choices that execute a random encounter
 locToChoice :: Location -> Choice Game

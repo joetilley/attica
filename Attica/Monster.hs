@@ -3,6 +3,7 @@ module Attica.Monster
 	monster,
 	monsterName,
 	monsterCombatResult,
+	noMonster,
 	Monster
 )
 where
@@ -31,3 +32,7 @@ monster n hp c ad = do
 	mhp <- rollDice $ d hp
 	return Monster { monsterName=n, monsterCombatResult=c, monsterHP=mhp,
 					 monsterToHit=15, monsterAttackBonus=0, monsterAttackDamage=ad}
+
+noMonster :: Monster
+noMonster = Monster { monsterName="", monsterCombatResult="", monsterHP=0,
+				      monsterToHit=0, monsterAttackBonus=0, monsterAttackDamage=0}

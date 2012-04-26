@@ -3,8 +3,14 @@
 module Attica.Game
 (
 	GameState,
+	Game,
 	runGame,
-	Game
+	getPlayer,
+	setPlayer,
+	damagePlayer,
+	setMonster,
+	getMonster,
+	damageMonster
 )
 where
 
@@ -13,44 +19,44 @@ import Attica.Core
 import Attica.Player
 import Attica.Monster
 
-data GameState = GameState Player (Maybe Monster)
+data GameState = GameState Player Monster
 
 newtype Game a = GameM {
 	runGameM :: StateT GameState IO a
 } deriving (Monad, MonadIO, MonadState GameState)
 
 runGame :: Game a -> Player -> IO (a, GameState)
-runGame g p = runStateT (runGameM g) $ GameState p Nothing
+runGame g p = runStateT (runGameM g) $ GameState p noMonster
 
-thePlayer :: Game a -> Game Player
-thePlayer g = do
+getPlayer :: Game Player
+getPlayer = do
 	(GameState p _) <- get
 	return p
 
-setPlayer :: Game a -> Player -> Game ()
-setPlayer g p = do
+setPlayer :: Player -> Game ()
+setPlayer p = do
 	(GameState _ m) <- get
 	put $ GameState p m
 	return ()
 
-damagePlayer :: Game a -> Int -> Game ()
-damagePlayer g amt = do 
-	p <- thePlayer g
-	setPlayer g $ damage p amt
+damagePlayer :: Int -> Game ()
+damagePlayer amt = do 
+	p <- getPlayer
+	liftIO $ putStrLn $ "You take " ++ (show amt) ++ " damage"
+	setPlayer $ damage p amt
 
-setMonster :: Game a -> Monster -> Game ()
-setMonster g m = do
+setMonster :: Monster -> Game ()
+setMonster m = do
 	(GameState p _) <- get
-	put $ GameState p $ Just m
+	put $ GameState p m
 
-getMonster :: Game a -> Game (Maybe Monster)
-getMonster g = do
+getMonster :: Game Monster
+getMonster = do
 	(GameState _ m) <- get
 	return m
 
-damageMonster :: Game a -> Int -> Game ()
-damageMonster g amt = do
-	mm <- getMonster g
-	case mm of
-		Just m -> setMonster g $ damage m amt
-		Nothing -> return ()
+damageMonster :: Int -> Game ()
+damageMonster amt = do
+	m <- getMonster
+	liftIO $ putStrLn $ "The monster takes " ++ (show amt) ++ " damage"
+	setMonster $ damage m amt

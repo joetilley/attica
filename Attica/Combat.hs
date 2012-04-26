@@ -1,6 +1,7 @@
 module Attica.Combat
 (
-	hits
+	hits,
+	combatLoop
 )
 where
 
@@ -9,13 +10,24 @@ import Control.Monad.IO.Class (MonadIO, liftIO)
 import Attica.Game
 import Attica.IO
 import Attica.Core
+import Attica.Monster
+
+combatActions = [choice "Attack" attack ]
+
+attack :: Game()
+attack = do
+	m <- getMonster
+	p <- getPlayer
+	h <- hits p m 
+	if h
+		then damageMonster (attackDamage p)
+		else liftIO $ putStrLn $ "You miss the " ++ (monsterName m)
 
 combatLoop :: Game ()
 combatLoop = do
-   inp <- singleLineInput "Type q to quit> "
-   if inp == "q" 
-      then return()
-      else combatLoop
+	c <- makeChoice combatActions "What now? "
+   	choiceAction c
+   	combatLoop
 
 
 hits :: MonadIO m => Combatant a => Combatant b => a -> b -> m Bool

@@ -2,13 +2,14 @@
 
 module Attica.IO 
 (
+   Choice,
    gamePrintLn,
    singleLineInput,
    getInput,
    choice,
    makeChoice,
    runChoice,
-   Choice
+   choiceAction
    )
 where
 
@@ -57,6 +58,9 @@ instance Show (Choice m) where
 
 choice :: MonadIO m => String -> m () -> Choice m
 choice = Choice
+
+choiceAction :: MonadIO m => Choice m -> m ()
+choiceAction (Choice _ a) = a
 
 runChoice :: MonadIO m => Choice m -> m ()
 runChoice (Choice _ action) = action
