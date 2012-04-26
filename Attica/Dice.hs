@@ -9,6 +9,7 @@ import Control.Monad
 import System.Random
 import Text.ParserCombinators.Parsec
 import Text.ParserCombinators.Parsec.Token
+import Control.Monad.IO.Class (MonadIO, liftIO)
 
 data Dice = Dice Int Int -- Number of Dice, Number of Sides
 
@@ -30,12 +31,12 @@ diceParser = do
 	return $ Dice numDice numSides
 
 --  | Resolves a die roll
-rollDice :: Dice -> IO Int
+rollDice :: MonadIO m => Dice -> m Int
 rollDice (Dice num sides) = do
 	diceVals <- forM (replicate num sides) rollDie
 	return $ foldl (+) 0 diceVals
 
 --  | Rolls an n sided die
-rollDie :: Int -> IO Int
-rollDie n = getStdRandom (randomR(1, n)) :: IO Int
+rollDie :: MonadIO m => Int -> m Int
+rollDie n = liftIO $ getStdRandom (randomR(1, n)) 
 

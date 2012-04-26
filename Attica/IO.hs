@@ -1,3 +1,5 @@
+{-# LANGUAGE ExistentialQuantification #-}
+
 module Attica.IO 
 (
    gamePrintLn,
@@ -16,13 +18,13 @@ import Control.Monad.IO.Class (MonadIO, liftIO)
 gamePrintLn :: MonadIO m => String -> m ()
 gamePrintLn s = liftIO $ putStrLn s
 
-singleLineInput :: String -> IO String
+singleLineInput :: MonadIO m => String -> m String
 singleLineInput str = do
-   putStr str
-   hFlush stdout
-   getLine
+   liftIO $ putStr str
+   liftIO $ hFlush stdout
+   liftIO $ getLine
 
-getInput :: String -> [String] -> IO String
+getInput :: MonadIO m => String -> [String] -> m String
 getInput prompt valids = do
    inp <- singleLineInput prompt
    if elem inp valids 
@@ -31,7 +33,7 @@ getInput prompt valids = do
          gamePrintLn "Invalid Input"
          getInput prompt valids
 
-printStrings :: [String] -> IO ()
+printStrings :: MonadIO m => [String] -> m ()
 printStrings [] = return ()
 printStrings (x:xs) = do
    gamePrintLn x
@@ -41,20 +43,20 @@ numStrList :: Int -> [String]
 numStrList 0 = []
 numStrList n = (show n) : numStrList (n-1)
          
-makeChoice :: Show a => [a] -> String -> IO a
+makeChoice :: MonadIO m => Show a => [a] -> String -> m a
 makeChoice choices prompt = do
    printStrings $ zipWith (\x y -> (show x) ++ ") " ++ (show y)) [1 .. 1000] choices
    strN <- getInput prompt (numStrList (length choices))
    let n = read strN :: Int
    return (choices !! (n-1))
   
-data Choice = Choice String (IO ())
+data Choice m = MonadIO m => Choice String (m ())
 
-instance Show Choice where
+instance Show (Choice m) where
    show (Choice prompt _) = prompt
 
-choice :: String -> IO () -> Choice
+choice :: MonadIO m => String -> m () -> Choice m
 choice = Choice
 
-runChoice :: Choice -> IO ()
+runChoice :: MonadIO m => Choice m -> m ()
 runChoice (Choice _ action) = action

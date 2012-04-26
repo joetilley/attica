@@ -4,6 +4,8 @@ import Control.Monad.State (StateT)
 import Attica.IO
 import Attica.Locations
 import Attica.Dice
+import Attica.Game
+import Attica.Player
 
 -- You are trying to use pattern matching with a boolean type to trigger actions
 -- Why not make the actions BE the state
@@ -42,7 +44,7 @@ rollTestLoop = do
 
 main :: IO ()
 main = do
-   rollTestLoop
    intro
-   goAnywhere
+   runGame goAnywhere $ player 50
+   return ()
    
