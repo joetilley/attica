@@ -46,9 +46,11 @@ numStrList n = (show n) : numStrList (n-1)
          
 makeChoice :: MonadIO m => Show a => [a] -> String -> m a
 makeChoice choices prompt = do
+   gamePrintLn ""
    printStrings $ zipWith (\x y -> (show x) ++ ") " ++ (show y)) [1 .. 1000] choices
    strN <- getInput prompt (numStrList (length choices))
    let n = read strN :: Int
+   gamePrintLn ""
    return (choices !! (n-1))
   
 data Choice m = MonadIO m => Choice String (m ())

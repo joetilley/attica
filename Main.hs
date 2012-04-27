@@ -28,5 +28,5 @@ main :: IO ()
 main = do
    let thePlayer = player 50
    intro
-   runGame goAnywhere $ thePlayer
+   runGame goAnywhere thePlayer
    return ()

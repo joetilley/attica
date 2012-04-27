@@ -4,6 +4,10 @@ module Attica.Monster
 	monsterName,
 	monsterCombatResult,
 	noMonster,
+	monsterHP,
+	monsterToHit,
+	monsterAttackBonus,
+	monsterAttackDamage,
 	Monster
 )
 where
