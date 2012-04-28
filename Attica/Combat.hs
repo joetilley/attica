@@ -10,6 +10,7 @@ where
 import System.Random
 import Control.Monad.IO.Class (MonadIO, liftIO)
 import Control.Monad.State
+import Attica.Dice
 import Attica.Game
 import Attica.IO
 import Attica.Core
@@ -27,20 +28,26 @@ liftGame g = Combat $ StateT $ \s -> do
 runCombat :: Combat a -> Monster -> Game (a, Monster)
 runCombat c m =  runStateT (runCombatM c) m
 
-combat :: Monster -> Game Monster
+combat :: Monster -> Game (String, Monster)
 combat mi= do
- (_, mo) <- runCombat doCombat mi
- return mo
+ runCombat doCombat mi
 
 combatActions = [choice "Attack" attack ]
 
 -- : Runs a round of combat decides whether to continue or not
-doCombat :: Combat ()
+doCombat :: Combat String
 doCombat = do
 	c <- makeChoice combatActions "What now? " -- Get Player Input
    	choiceAction c
-	attackPlayer
-	doCombat
+   	m <- getMonster
+	if (hp m) <= 0
+		then return $ "You have defeated the " ++ monsterName m
+		else do
+			attackPlayer
+			php <- liftM hp $ liftGame $ getPlayer
+			if php <= 0
+				then return $ "You have been defeated."
+				else doCombat
 
 attackPlayer :: Combat ()
 attackPlayer = do
@@ -48,7 +55,9 @@ attackPlayer = do
 	p <- liftGame getPlayer
 	h <- hits m p
 	if h
-		then liftGame $ damagePlayer (monsterAttackDamage m)
+		then do
+			dmg <- rollDice $ monsterAttackDamageDice m
+			liftGame $ damagePlayer dmg
 		else liftIO $ putStrLn $ "The " ++ (monsterName m) ++ " misses you."
 
 getMonster :: Combat Monster
@@ -69,7 +78,9 @@ attack = do
 	p <- liftGame $ getPlayer
 	h <- hits p m 
 	if h
-		then damageMonster (attackDamage p)
+		then do
+			dmg <- rollDice $ attackDamageDice p
+		 	damageMonster dmg
 		else liftIO $ putStrLn $ "You miss the " ++ (monsterName m)
 
 

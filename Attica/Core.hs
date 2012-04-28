@@ -2,15 +2,18 @@ module Attica.Core
 (
 	Combatant,
 	toHit,
-	damage,
 	attackBonus,
-	attackDamage,
+	attackDamageDice,
+	damage,
+	hp
 )
 where
 
-class Combatant c where
-	attackBonus :: c -> Int
-	toHit :: c -> Int
-	attackDamage :: c -> Int
-	damage :: c -> Int -> c
+import Attica.Dice
 
+class Combatant c where
+	toHit :: c -> Int
+	attackBonus :: c -> Int
+	attackDamageDice :: c -> Dice
+	damage :: c -> Int -> c
+	hp :: c -> Int

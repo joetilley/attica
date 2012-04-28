@@ -7,14 +7,14 @@ module Attica.Monster
 	monsterHP,
 	monsterToHit,
 	monsterAttackBonus,
-	monsterAttackDamage,
+	monsterAttackDamageDice,
 	Monster
 )
 where
 
-import Attica.Dice
 import Control.Monad.IO.Class (MonadIO, liftIO)
 import Attica.Core
+import Attica.Dice
 
 data Monster = Monster { 
 	monsterName :: String,
@@ -22,21 +22,22 @@ data Monster = Monster {
 	monsterCombatResult :: String,
 	monsterToHit :: Int,
 	monsterAttackBonus :: Int,
-	monsterAttackDamage :: Int
-} deriving (Show) -- For debugging
+	monsterAttackDamageDice :: Dice
+}
 
 instance Combatant Monster where
 	damage m amt = m { monsterHP = (monsterHP m) - amt }
 	attackBonus m = monsterAttackBonus m
-	attackDamage m = monsterAttackDamage m
+	attackDamageDice m = monsterAttackDamageDice m
 	toHit m = monsterToHit m
+	hp m = monsterHP m
 
-monster :: MonadIO m => String -> String-> String -> Int -> m Monster
+monster :: MonadIO m => String -> String-> String -> String -> m Monster
 monster n hp c ad = do
 	mhp <- rollDice $ d hp
 	return Monster { monsterName=n, monsterCombatResult=c, monsterHP=mhp,
-					 monsterToHit=15, monsterAttackBonus=0, monsterAttackDamage=ad}
+					 monsterToHit=15, monsterAttackBonus=0, monsterAttackDamageDice=d ad}
 
 noMonster :: Monster
 noMonster = Monster { monsterName="", monsterCombatResult="", monsterHP=0,
-				      monsterToHit=0, monsterAttackBonus=0, monsterAttackDamage=0}
+				      monsterToHit=0, monsterAttackBonus=0, monsterAttackDamageDice=d "0d0"}

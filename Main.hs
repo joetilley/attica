@@ -1,10 +1,11 @@
 import System.IO
 import Control.Monad.IO.Class (MonadIO, liftIO)
 import Control.Monad.State (StateT)
-import Attica.IO
-import Attica.Locations
+import Attica.Core
 import Attica.Dice
 import Attica.Game
+import Attica.IO
+import Attica.Locations
 import Attica.Player
 
 -- You are trying to use pattern matching with a boolean type to trigger actions
@@ -26,7 +27,9 @@ intro = do
 
 main :: IO ()
 main = do
-   let thePlayer = player 50
+   php <- rollDice $ d "2d10"
+   let p = player php
    intro
-   runGame goAnywhere thePlayer
+   putStrLn $ "You have " ++ (show $ hp p) ++ " HP."
+   runGame goAnywhere p
    return ()

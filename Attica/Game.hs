@@ -30,6 +30,7 @@ setPlayer = put
 damagePlayer :: Int -> Game ()
 damagePlayer amt = do 
 	p <- getPlayer
-	liftIO $ putStrLn $ "You take " ++ (show amt) ++ " damage"
 	setPlayer $ damage p amt
+	p <- getPlayer
+	liftIO $ putStrLn $ "You take " ++ (show amt) ++ " damage. " ++ (show $ hp p) ++ " remaining."
 

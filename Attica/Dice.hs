@@ -1,5 +1,6 @@
 module Attica.Dice 
 (
+	Dice,
 	d,
 	rollDice
 )
