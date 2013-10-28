@@ -1,0 +1,234 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"Com",
+				"Combatant"
+			],
+			[
+				"con",
+				"constrainedCount"
+			],
+			[
+				"Countr",
+				"countEntries"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"contents": "{-# LANGUAGE Rank2Types #-}\n\nimport Control.Applicative\nimport Control.Monad.Identity\n\ntype RefF a b = forall f. Functor f => (b -> f b) -> (a -> f a)\n\nget :: RefF a b -> a -> b\nget r = getConst . r Const\n\nimport System.IO\nimport Control.Monad.IO.Class (MonadIO, liftIO)\nimport Control.Monad.State (StateT)\nimport Attica.Core\nimport Attica.Dice\nimport Attica.Game\nimport Attica.IO\nimport Attica.Locations\nimport Attica.Player\n\n-- You are trying to use pattern matching with a boolean type to trigger actions\n-- Why not make the actions BE the state\n-- Game has State plus NextAction\n\nprintHeader :: MonadIO m => m ()\nprintHeader = do\n   gamePrintLn \"Attica\"\n   gamePrintLn \"A Game of \\\"Fun\\\"\"\n   gamePrintLn \"Copyright 2012 - Joseph Tilley\"\n   gamePrintLn \"\"\n\nintro :: IO ()\nintro = do\n   printHeader\n   gamePrintLn \"Welcome to Attica.\"\n   gamePrintLn \"You are a skilled swordsman, seeking adventure.\"\n\nmain :: IO ()\nmain = do\n   php <- rollDice $ d \"2d10\"\n   let p = player php\n   intro\n   putStrLn $ \"You have \" ++ (show $ hp p) ++ \" HP.\"\n   runGame goAnywhere p\n   return ()",
+			"file": "Main.hs",
+			"file_size": 936,
+			"file_write_time": 129851948156105919,
+			"settings":
+			{
+				"buffer_size": 1077,
+				"line_ending": "Windows"
+			}
+		}
+	],
+	"build_system": "",
+	"command_palette":
+	{
+		"height": 81.0,
+		"selected_items":
+		[
+			[
+				"install",
+				"Package Control: Install Package"
+			],
+			[
+				"Install",
+				"Package Control: Install Package"
+			],
+			[
+				"Package",
+				"Package Control: Install Package"
+			],
+			[
+				"",
+				"Bookmarks: Select Next"
+			]
+		],
+		"width": 400.0
+	},
+	"console":
+	{
+		"height": 125.0
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/C/Temp/whatever.go",
+		"/C/Temp/test.cs",
+		"/C/Dropbox/HomeProjects/Attica/Attica/Game.hs",
+		"/C/Users/joe/Hello.scal",
+		"/C/Dropbox/HomeProjects/Attica/Attica/IO.hs",
+		"/C/Dropbox/HomeProjects/Attica/Attica/Combat.hs",
+		"/C/Dropbox/HomeProjects/Attica/Attica/Monster.hs",
+		"/C/Dropbox/HomeProjects/Attica/Attica/Player.hs",
+		"/C/Dropbox/HomeProjects/Attica/Attica/Dice.hs",
+		"/C/Dropbox/HomeProjects/Attica/Attica.cabal",
+		"/C/Dropbox/HomeProjects/Attica/Main.hs",
+		"/C/Dropbox/HomeProjects/Attica/Attica/Locations.hs",
+		"/C/Dropbox/HomeProjects/Attica/Combat.hs",
+		"/C/Dropbox/Projects/VIA/Docs/blog/viame/style.css",
+		"/C/Dropbox/Projects/VIA/Docs/blog/viapro/style.css",
+		"/C/Dropbox/Projects/VIA/Docs/blog/viame/header.php",
+		"/C/Dropbox/Projects/VIA/Docs/blog/viame/index.php",
+		"/C/temp/Proj/CountEntries.hs",
+		"/C/temp/Proj/CountEntries.cabal",
+		"/C/temp/Proj/Main.hs",
+		"/C/Dropbox/HomeProjects/Attica/Attica.hs",
+		"/C/Dropbox/HomeProjects/Attica/Setup.hs",
+		"/C/Users/joe/AppData/Roaming/Sublime Text 2/Packages/User/JSON.sublime-settings",
+		"/C/Users/joe/AppData/Roaming/Sublime Text 2/Packages/User/Distraction Free.sublime-settings",
+		"/C/Dropbox/Projects/changes.md"
+	],
+	"find":
+	{
+		"height": 34.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"playeDefend",
+			"runDefen",
+			"logo",
+			"putStrLn"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"gamePrintLn"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 0,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "Main.hs",
+					"settings":
+					{
+						"buffer_size": 1077,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1062,
+								1062
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Haskell/Haskell.tmLanguage",
+							"tab_size": 3,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 45.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 0.0
+	},
+	"input":
+	{
+		"height": 0.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"replace":
+	{
+		"height": 62.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"selected_items":
+		[
+			[
+				"",
+				"/C/Dropbox/HomeProjects/Attica/AtticaSublime.sublime-project"
+			]
+		],
+		"width": 380.0
+	},
+	"show_minimap": true,
+	"show_open_files": true,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 138.0,
+	"status_bar_visible": true
+}

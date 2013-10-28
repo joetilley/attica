@@ -9,4 +9,4 @@ Build-Type:          Simple
 Cabal-Version:       >=1.2
 Executable attica
   Main-is:           Main.hs
-  Build-Depends:     base >= 3 && < 5, transformers, mtl, random, parsec
+  Build-Depends:     base >= 3 && < 5, transformers, mtl, random, parsec, hscurses

@@ -15,10 +15,11 @@ import Control.Monad.IO.Class (MonadIO, liftIO)
 data Location = Location String [Game Monster]
 
 sewers = Location "The Sewers" [ (monster "Rat" "2d4" "You catch rabies." "1d3"), (monster "CHUD" "2d4" "You are eaten." "2d3")]
+dungeon = Location "The Castle Dungeon" [(monster "Cultist" "3d4" "You are sacrificed." "1d6")]
 graveyard = Location "The Graveyard" [ (monster "Skeleton" "2d6"  "You are boned." "2d5"), (monster "Vampire" "3d8" "You are exsanguinated." "3d5")]
 dragonsLair = Location "The Dragon's Lair" [(monster "Dragon" "3d12" "You are fried." "5d6")]
 
-all_locs = [sewers, graveyard, dragonsLair]
+all_locs = [sewers, dungeon, graveyard, dragonsLair]
 
 randomEncounter :: [Game Monster] -> Game ()
 randomEncounter mons = do

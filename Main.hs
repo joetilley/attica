@@ -1,3 +1,5 @@
+{-# LANGUAGE Rank2Types #-}
+
 import System.IO
 import Control.Monad.IO.Class (MonadIO, liftIO)
 import Control.Monad.State (StateT)
@@ -7,6 +9,8 @@ import Attica.Game
 import Attica.IO
 import Attica.Locations
 import Attica.Player
+
+import UI.HSCurses.Curses
 
 -- You are trying to use pattern matching with a boolean type to trigger actions
 -- Why not make the actions BE the state
@@ -27,9 +31,15 @@ intro = do
 
 main :: IO ()
 main = do
-   php <- rollDice $ d "2d10"
-   let p = player php
-   intro
-   putStrLn $ "You have " ++ (show $ hp p) ++ " HP."
-   runGame goAnywhere p
+   win <- initScr
+   (x,y) <- scrSize
+   wAddStr win $ show y
+   wRefresh win
+   getCh
+   endWin 
+   --php <- rollDice $ d "2d10"
+   --let p = player php
+   --intro
+   --putStrLn $ "You have " ++ (show $ hp p) ++ " HP."
+   --runGame goAnywhere p
    return ()
